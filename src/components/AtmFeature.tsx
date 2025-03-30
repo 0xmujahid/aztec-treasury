@@ -89,30 +89,7 @@ export default function AtmFeature() {
         </div>
         
         {/* Countdown / Coming Soon */}
-        <div className="mt-16 text-center max-w-xl mx-auto">
-          <div className="bg-primary/10 rounded-lg p-6 border border-primary/20">
-            <h3 className="text-xl font-bold text-primary mb-2">ATM Launch Countdown</h3>
-            <div className="flex justify-center gap-4 mb-4">
-              <div className="bg-dark/70 p-3 rounded-lg w-16">
-                <div className="text-2xl font-bold">30</div>
-                <div className="text-xs text-gray-400">Days</div>
-              </div>
-              <div className="bg-dark/70 p-3 rounded-lg w-16">
-                <div className="text-2xl font-bold">12</div>
-                <div className="text-xs text-gray-400">Hours</div>
-              </div>
-              <div className="bg-dark/70 p-3 rounded-lg w-16">
-                <div className="text-2xl font-bold">45</div>
-                <div className="text-xs text-gray-400">Minutes</div>
-              </div>
-              <div className="bg-dark/70 p-3 rounded-lg w-16">
-                <div className="text-2xl font-bold">20</div>
-                <div className="text-xs text-gray-400">Seconds</div>
-              </div>
-            </div>
-            <p className="text-gray-300 text-sm">First ATM locations to be announced soon!</p>
-          </div>
-        </div>
+        
       </div>
     </section>
   );

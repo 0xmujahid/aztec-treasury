@@ -5,14 +5,14 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-screen bg-dark text-white overflow-hidden pt-20">
+    <section className="relative min-h-screen bg-dark text-white overflow-hidden pt-20 pb-24">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/70 to-dark"></div>
       
       {/* Background image */}
-      <div className="absolute inset-0 opacity-30 z-0">
+      <div className="absolute inset-0 opacity-70 z-0">
         <Image 
-          src="/images/shutterstock_2571870219.jpg" 
+          src="/images/1.jpg" 
           alt="Aztec Treasury Background"
           fill
           style={{ objectFit: 'cover' }}
