@@ -19,7 +19,8 @@ export default function Tokenomics() {
   {/* Column 1 */}
   <div className="bg-[#E1B954] p-6 rounded-full border-2 border-white/10 flex flex-col items-center justify-center 
                  transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#E1B954]/50 hover:border-white/30">
-    <h3 className="text-2xl md:text-3xl font-bold text-center">Total Supply: 1,000,000,000</h3>
+    <h3 className="text-2xl md:text-3xl font-bold text-center">Total Supply</h3>
+    <p>15,000,000 $AZT – Limited supply for scarcity and value </p>
   </div>
 
   {/* Column 2 */}
@@ -35,13 +36,34 @@ export default function Tokenomics() {
         className="w-6 h-6 md:w-8 md:h-8 transition-transform duration-300 hover:rotate-12"
       />
     </div>
+    <p>Fast, low-cost transactions</p>
   </div>
 
   {/* Column 3 */}
   <div className="bg-[#E1B954] p-6 rounded-full border-2 border-white/10 flex flex-col items-center justify-center 
                  transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#E1B954]/50 hover:border-white/30">
-    <h3 className="text-2xl md:text-3xl font-bold text-center">LP: Burnt</h3>
+    <h3 className="text-2xl md:text-3xl font-bold text-center">LP Tokens Burnt</h3>
+    <p>Liquidity pool tokens burnt for security</p>
   </div>
+</div>
+
+
+<div className="grid grid-cols-1 md:grid-cols-2 mt-12 gap-6"> {/* Simplified breakpoints */}
+  
+  {/* Column 1 */}
+  <div className="bg-[#E1B954] p-6 rounded-full border-2 border-white/10 flex flex-col items-center justify-center 
+                  transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#E1B954]/50 hover:border-white/30">
+    <h3 className="text-2xl md:text-3xl font-bold text-center">No presale, No Taxes</h3>
+    <p className="text-center">No hidden fees. Zero taxes on transactions—transparent and fair</p>
+  </div>
+  
+  {/* Column 2 */}
+  <div className="bg-[#E1B954] p-6 rounded-full border-2 border-white/10 flex flex-col items-center justify-center 
+                  transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#E1B954]/50 hover:border-white/30">
+    <h3 className="text-2xl md:text-3xl font-bold text-center">Contract Renounced</h3>
+    <p className="text-center">Community-driven with renounced ownership</p>
+  </div>
+
 </div>
   </div>
 </section>

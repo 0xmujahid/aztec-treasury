@@ -2,34 +2,87 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { motion ,Variants} from "framer-motion";
 
 export default function Hero() {
+  // Type-safe animation variants
+  const meltingVariants: Variants = {
+    initial: { 
+      y: 0,
+      opacity: 1,
+      filter: "blur(0px)"
+    },
+    animate: (i: number) => ({
+      y: [0, -5, 5, -3, 3, 0],
+      opacity: [1, 0.8, 1, 0.9, 1],
+      filter: ["blur(0px)", "blur(1px)", "blur(0px)"],
+      transition: {
+        duration: 3,
+        repeat: Infinity,
+        repeatType: "reverse" as const,
+        delay: i * 0.1
+      }
+    })
+  };
+
+  const text = "The Hidden Treasure of Cryptocurrency";
+  const words = text.split(" ");
   return (
     <section className="relative min-h-screen bg-dark text-white overflow-hidden pt-20 pb-24">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/70 to-dark"></div>
       
-      {/* Background image */}
-      <div className="absolute inset-0 opacity-70 z-0">
-        <Image 
-          src="/images/1.jpg" 
-          alt="Aztec Treasury Background"
-          fill
-          style={{ objectFit: 'cover' }}
-          quality={100}
-          priority
-        />
-      </div>
+      {/* Background image with bottom shadow */}
+     <div className="absolute inset-0 opacity-70 z-0">
+  {/* Shadow container */}
+        <div className="relative w-full h-full after:absolute after:inset-x-0 after:bottom-0 after:h-8 after:bg-gradient-to-t after:from-black/20 after:to-transparent after:pointer-events-none">
+    <Image 
+      src="/images/hero.jpg" 
+      alt="Aztec Treasury Background"
+      fill
+      style={{ objectFit: 'cover' }}
+      quality={100}
+      priority
+    />
+  </div>
+</div>
 
       {/* Content */}
       <div className="container mx-auto px-4 pt-20 pb-24 relative z-10 flex flex-col items-center">
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-center">
-          <span className="text-primary">Aztec</span> Treasury
-        </h1>
+      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-center">
+      {words.map((word, wordIndex) => (
+        <motion.span 
+          key={`word-${wordIndex}`}
+          className="inline-block mr-2"
+          initial="initial"
+          animate="animate"
+          custom={wordIndex}
+          variants={{
+            initial: { opacity: 1 },
+            animate: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.05
+              }
+            }
+          }}
+        >
+          {word.split("").map((char, charIndex) => (
+            <motion.span
+              key={`char-${wordIndex}-${charIndex}`}
+              className={`inline-block ${wordIndex === 1 ? "text-primary" : ""}`}
+              variants={meltingVariants}
+              custom={charIndex}
+            >
+              {char === ' ' ? '\u00A0' : char}
+            </motion.span>
+          ))}
+        </motion.span>
+      ))}
+    </h1>
         <div className="w-full max-w-3xl text-center">
           <h2 className="text-xl md:text-2xl mb-6 font-light">
-            Limited supply of 15 million coins. Uncover the Hidden Treasure of Modern Cryptocurrency
-          </h2>
+          With a total supply of only 15 million coins, Aztec Coin is one of the lowest supply crypto in existence, even lower than Bitcoin.           </h2>
 
           <div className="relative">
             {/* Shadow beneath coin */}

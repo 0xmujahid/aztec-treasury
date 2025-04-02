@@ -7,6 +7,7 @@ import HowToBuy from '../components/HowToBuy';
 import ListedOn from '../components/ListedOn';
 import AtmFeature from '../components/AtmFeature';
 import ImageSection from '../components/ImageSection';
+import Roadmap from '../components/Roadmap';
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <About />
       <HowToBuy />
       <ListedOn />
+      <Roadmap />
       <AtmFeature />
       <Tokenomics />
       <ImageSection />
