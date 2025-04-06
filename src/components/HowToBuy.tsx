@@ -123,34 +123,27 @@ export default function HowToBuy() {
           </div>
         </div>
   
-        {/* Simplified Step Navigation */}
-        {/* <div className="flex justify-center gap-6 mt-12">
-          {steps.map((step, index) => (
-            <button
-              key={index}
-              onClick={() => goToStep(index)}
-              className={`flex flex-col items-center transition-all duration-300 ${
-                activeStep === index ? 'scale-110' : 'opacity-80 hover:opacity-100'
-              }`}
-            >
-              <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-3 transition-all ${
-                activeStep === index 
-                  ? 'bg-primary text-dark shadow-lg shadow-primary/50' 
-                  : 'bg-dark/50 text-primary'
-              }`}>
-                <i className={`fas fa-${step.icon} text-xl`}></i>
-              </div>
-              <span className={`text-sm font-medium ${
-                activeStep === index ? 'text-primary' : 'text-gray-400'
-              }`}>
-                Step {index + 1}
-              </span>
-            </button>
-          ))}
-        </div> */}
-  
+        {/* Community Benefits */}
+        <div className="mt-16 bg-gradient-to-r from-dark/80 to-dark/60 p-8 rounded-xl border border-primary/30 backdrop-blur-sm shadow-lg">
+          <h3 className="text-2xl font-bold text-primary mb-4 text-center">Join The Hidden Treasures Community</h3>
+          <p className="text-lg text-gray-300 text-center leading-relaxed mb-6">
+            When you hold Aztec Coin you're part of a community that understands the true potential of limited assets.
+            Share insights, have fun, and watch your wealth grow together.
+          </p>
+          <div className="flex justify-center space-x-4 mt-6">
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" 
+              className="bg-primary/20 hover:bg-primary/30 text-primary px-4 py-2 rounded-lg transition-colors flex items-center">
+              <i className="fab fa-twitter mr-2"></i> Twitter
+            </a>
+            <a href="https://t.me" target="_blank" rel="noopener noreferrer" 
+              className="bg-primary/20 hover:bg-primary/30 text-primary px-4 py-2 rounded-lg transition-colors flex items-center">
+              <i className="fab fa-telegram mr-2"></i> Telegram
+            </a>
+          </div>
+        </div>
+
         {/* CTA Button */}
-        {/* <div className="text-center mt-12">
+        <div className="text-center mt-12">
           <a 
             href="https://jup.ag" 
             target="_blank" 
@@ -159,7 +152,7 @@ export default function HowToBuy() {
           >
             Buy $AZT Now
           </a>
-        </div> */}
+        </div>
       </div>
     </div>
   </section>

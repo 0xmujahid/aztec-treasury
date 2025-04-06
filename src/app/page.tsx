@@ -1,6 +1,7 @@
 import React from 'react';
 // import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import WhoWeAre from '../components/WhoWeAre';
 import About from '../components/About';
 import Tokenomics from '../components/Tokenomics';
 import HowToBuy from '../components/HowToBuy';
@@ -14,6 +15,7 @@ export default function Home() {
     <main className="min-h-screen bg-dark">
       {/* <Navbar /> */}
       <Hero />
+      <WhoWeAre />
       <About />
       <HowToBuy />
       <ListedOn />
