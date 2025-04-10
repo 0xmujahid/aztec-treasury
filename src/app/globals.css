@@ -6,6 +6,12 @@
   --primary: #E1B954;
   --secondary: #8B6D1F;
   --accent: #FFD700;
+  
+  /* Add CSS variables for the scroll effects */
+  --color-primary-rgb: 225, 185, 84; /* RGB values of the primary color */
+  --color-primary-transparent: rgba(var(--color-primary-rgb), 0);
+  --color-primary-30: rgba(var(--color-primary-rgb), 0.3);
+  --color-primary-glow: 0 0 15px rgba(var(--color-primary-rgb), 0.6);
 }
 
 @theme inline {
@@ -48,6 +54,68 @@ body {
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+}
+
+/* Section transition effects */
+.section-transition-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  z-index: 5;
+  background: linear-gradient(to top, transparent, var(--color-primary-30));
+}
+
+.section-transition-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  z-index: 5;
+  background: linear-gradient(to bottom, transparent, var(--color-primary-30));
+}
+
+/* Section boundary with subtle highlight */
+.section-boundary {
+  position: relative;
+}
+
+.section-boundary::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, var(--primary), transparent);
+  box-shadow: var(--color-primary-glow);
+}
+
+.section-boundary-top::after {
+  top: 0;
+}
+
+.section-boundary-bottom::after {
+  bottom: 0;
+}
+
+/* Section label */
+.section-label {
+  position: absolute;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(var(--color-primary-rgb), 0.2);
+  color: var(--primary);
+  padding: 0.25rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(var(--color-primary-rgb), 0.3);
+  z-index: 20;
+  box-shadow: var(--color-primary-glow);
 }
 
 /* 3D Coin Flip Animation */

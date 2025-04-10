@@ -1,22 +1,25 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
 
 export default function About() {
   return (
-    <section id="about" className="py-20 pt-24 relative">
-      {/* Background Image with Overlay */}
-      {/* <div className="absolute inset-0 z-0">
-        <Image 
-          src="/images/2.jpg" 
-          alt="Aztec Treasure Concept"
-          fill
-          style={{ objectFit: 'cover' }}
-          className="opacity-70"
-        />
+    <section id="about" className="py-20 pt-24 relative section-boundary section-boundary-top">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/95 to-dark/90"></div>
-      </div> */}
+        
+        {/* Fade from black at the top to create continuity with WhoWeAre section */}
+        <div className="absolute top-0 left-0 right-0 h-[100px] bg-gradient-to-b from-black to-transparent"></div>
+      </div>
+      
+      {/* Visual section divider at top - always visible */}
+      <div className="absolute top-0 left-0 right-0 z-10">
+        {/* Soft glow effect */}
+        <div className="w-full h-[8px] bg-gradient-to-t from-primary/30 to-transparent"></div>
+        {/* Gold accent line */}
+        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
+      </div>
 
       <div className="container mx-auto px-4 relative z-10 text-white">
         <div className="text-center mb-16">
@@ -67,7 +70,8 @@ export default function About() {
             </p>
           </div>
           
-          {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          {/* Feature grid section - currently commented out
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             <div className="bg-dark/50 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg hover:border-primary/50 transition-all duration-300">
               <h4 className="text-xl font-bold mb-2 text-primary">Solana-Based</h4>
               <p className="text-gray-300">
@@ -92,7 +96,8 @@ export default function About() {
                 Zero-fee ATMs coming soon for easy access
               </p>
             </div>
-          </div> */}
+          </div>
+          */}
         </div>
       </div>
     </section>

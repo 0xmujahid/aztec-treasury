@@ -140,8 +140,8 @@ export default function HowToBuy() {
               <i className="fab fa-telegram mr-2"></i> Telegram
             </a>
           </div>
-        </div>
-
+              </div>
+  
         {/* CTA Button */}
         <div className="text-center mt-12">
           <a 

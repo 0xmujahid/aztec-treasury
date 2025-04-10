@@ -1,10 +1,28 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion ,Variants} from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 export default function Hero() {
+  const [scrollY, setScrollY] = useState(0);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  // Calculate the transition effect based on scroll
+  const transitionStrength = Math.min(scrollY / 500, 1);
+
   // Type-safe animation variants
   const meltingVariants: Variants = {
     initial: { 
@@ -28,24 +46,41 @@ export default function Hero() {
   const text = "The Hidden Treasure of Cryptocurrency";
   const words = text.split(" ");
   return (
-    <section className="relative min-h-screen bg-dark text-white overflow-hidden pt-20 pb-24">
+    <section className="relative min-h-screen bg-dark text-white overflow-hidden pt-20 pb-24 section-boundary section-boundary-bottom">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/70 to-dark"></div>
       
       {/* Background image with bottom shadow */}
-     <div className="absolute inset-0 opacity-70 z-0">
-  {/* Shadow container */}
+      <div className="absolute inset-0 opacity-70 z-0">
+        {/* Shadow container */}
         <div className="relative w-full h-full after:absolute after:inset-x-0 after:bottom-0 after:h-8 after:bg-gradient-to-t after:from-black/20 after:to-transparent after:pointer-events-none">
-    <Image 
-      src="/images/hero.jpg" 
-      alt="Aztec Treasury Background"
-      fill
-      style={{ objectFit: 'cover' }}
-      quality={100}
-      priority
-    />
-  </div>
-</div>
+          <Image 
+            src="/images/header.jpg" 
+            alt="Aztec Treasury Background"
+            fill
+            style={{ objectFit: 'cover' }}
+            quality={100}
+            priority
+          />
+        </div>
+      </div>
+
+      {/* Visual section divider - always visible */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
+        {/* Gold accent line */}
+        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
+        {/* Soft glow effect */}
+        <div className="w-full h-[8px] bg-gradient-to-b from-primary/30 to-transparent"></div>
+      </div>
+
+      {/* Transition gradient to next section - gets stronger as user scrolls */}
+      <div 
+        className="section-transition-bottom transition-opacity duration-300"
+        style={{ opacity: transitionStrength }}
+      ></div>
+
+      {/* Section label */}
+     
 
       {/* Content */}
       <div className="container mx-auto px-4 pt-20 pb-24 relative z-10 flex flex-col items-center">
