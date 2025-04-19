@@ -7,7 +7,6 @@ import Tokenomics from '../components/Tokenomics';
 import HowToBuy from '../components/HowToBuy';
 import ListedOn from '../components/ListedOn';
 import AtmFeature from '../components/AtmFeature';
-import ImageSection from '../components/ImageSection';
 import Roadmap from '../components/Roadmap';
 
 export default function Home() {
@@ -22,7 +21,6 @@ export default function Home() {
       <Roadmap />
       <AtmFeature />
       <Tokenomics />
-      <ImageSection />
     </main>
   );
 }
