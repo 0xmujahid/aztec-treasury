@@ -1,5 +1,5 @@
 import React from 'react';
-// import Navbar from '../components/Navbar';
+import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import WhoWeAre from '../components/WhoWeAre';
 import About from '../components/About';
@@ -14,8 +14,8 @@ import SmoothScrollEffect from '../components/SmoothScrollEffect';
 export default function Home() {
   return (
     <main className="min-h-screen bg-dark">
-      {/* <Navbar /> */}
-      <SmoothScrollEffect />
+      <Navbar />
+      
       <Hero />
       <WhoWeAre />
       <About />

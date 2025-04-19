@@ -1,116 +1,132 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
-const WhoWeAre = () => {
-  const [scrollY, setScrollY] = useState(0);
+export default function WhoWeAre() {
+  const textControls = useAnimation();
+  const imageControls = useAnimation();
+  
+  const [textRef, textInView] = useInView({
+    triggerOnce: false,
+    threshold: 0.25,
+    rootMargin: "-100px 0px"
+  });
+  
+  const [imageRef, imageInView] = useInView({
+    triggerOnce: false,
+    threshold: 0.25,
+    rootMargin: "-100px 0px"
+  });
+
+  useEffect(() => {
+    if (textInView) {
+      textControls.start("visible");
+    } else {
+      textControls.start("hidden");
+    }
+  }, [textControls, textInView]);
   
   useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-    
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  // Calculate the transition effect based on scroll position relative to this section
-  const sectionTop = 800; // Approximate position where this section starts
-  const transitionZone = 300; // Height of transition zone
-  
-  // Fade in the top gradient when approaching this section and fade it out as we scroll past
-  let transitionOpacity = 0;
-  
-  if (scrollY > sectionTop - transitionZone && scrollY < sectionTop + 200) {
-    // Fade in during approach
-    if (scrollY < sectionTop) {
-      transitionOpacity = (scrollY - (sectionTop - transitionZone)) / transitionZone;
+    if (imageInView) {
+      imageControls.start("visible");
     } else {
-      // Fade out as we scroll deeper into the section
-      transitionOpacity = 1 - Math.min((scrollY - sectionTop) / 200, 1);
+      imageControls.start("hidden");
     }
-  }
-  
-  return (
-    <section className="py-20 relative section-boundary section-boundary-top section-boundary-bottom">
-      {/* Background Image with Overlay */}
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/header2.jpg"
-          alt="Who We Are Background"
-          fill
-          style={{ objectFit: 'cover' }}
-          className="opacity-70"
-        />
-        {/* Main gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-dark/90 via-dark/85 to-dark/80"></div>
-        
-        {/* Strong fade-to-black gradient at the bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-[150px] bg-gradient-to-t from-black to-transparent"></div>
-      </div>
-      
-      {/* Visual section divider at top - always visible */}
-      <div className="absolute top-0 left-0 right-0 z-10">
-        {/* Soft glow effect */}
-        <div className="w-full h-[8px] bg-gradient-to-t from-primary/30 to-transparent"></div>
-        {/* Gold accent line */}
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
-      </div>
-      
-      {/* Visual section divider at bottom - always visible */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
-        {/* Gold accent line */}
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
-        {/* Soft glow effect */}
-        <div className="w-full h-[8px] bg-gradient-to-b from-primary/30 to-transparent"></div>
-      </div>
-      
-      {/* Transition gradient from hero section - fades based on scroll position */}
-      <div 
-        className="section-transition-top transition-opacity duration-300 pointer-events-none"
-        style={{ opacity: transitionOpacity }}
-      ></div>
-      
-      {/* Section label - helps identify the different section */}
-      <div className="section-label">
-        <span>Who We Are</span>
-      </div>
-      
-      {/* Content */}
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">
-            <span className="text-primary">Who We Are</span>
-          </h2>
-          <div className="w-24 h-1 bg-primary mx-auto"></div>
-        </div>
+  }, [imageControls, imageInView]);
 
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-dark/70 p-8 rounded-lg border border-primary/20 backdrop-blur-sm mb-12">
-            <p className="text-lg text-white text-center leading-relaxed font-medium">
-              Aztec Coin is a treasure hunt rewarding those who understand the power of long-term holding. Built on the Solana network, it offers fast, low-cost transactions with a limited supply, ensuring both scarcity and real value.
-            </p>
-          </div>
-            
-          <div className="mt-12">
-            <h3 className="text-2xl md:text-3xl font-bold text-primary text-center mb-6">
-              Our Vision
-            </h3>
-            <div className="bg-dark/70 p-8 rounded-lg border border-primary/20 backdrop-blur-sm">
-              <p className="text-lg text-white text-center leading-relaxed font-medium">
-                To build a community of forward-thinkers who value scarcity and long-term growth. By embracing Aztec Coin, you're not just investing in a cryptocurrency — you're embarking on a journey to uncover wealth through the power of limited supply.
+  // Animation variants for image
+  const imageVariants = {
+    hidden: { 
+      opacity: 0,
+      scale: 0.95,
+      x: -50
+    },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      x: 0,
+      transition: {
+        duration: 1.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Animation variants for text
+  const textVariants = {
+    hidden: { 
+      opacity: 0,
+      x: 200
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 1.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  return (
+    <section className="bg-[#0A0A0A] text-white overflow-hidden relative" id="about">
+      <div className="container-fluid px-0 lg:px-0">
+        <div className="flex flex-col lg:flex-row items-center">
+          {/* Left side - Image */}
+          <motion.div 
+            ref={imageRef}
+            className="w-full lg:w-1/2 flex justify-start order-2 lg:order-1 mt-8 lg:mt-0"
+            initial="hidden"
+            animate={imageControls}
+            variants={imageVariants}
+          >
+            <div className="relative w-full max-w-[680px] ml-0 overflow-hidden rounded-xl">
+              {/* Shadow effect */}
+              <div className="absolute inset-0 shadow-[inset_0_0_80px_50px_rgba(10,10,10,0.95)] z-20 pointer-events-none"></div>
+              
+              {/* Image */}
+              <Image
+                src="/images/balance.png"
+                alt="Aztec Coin - Hidden Treasure"
+                width={680}
+                height={510}
+                priority
+                className="w-full h-auto max-h-[510px] z-10"
+              />
+              
+              {/* Edge gradient overlays */}
+              <div className="absolute inset-0 z-10 pointer-events-none"
+                style={{
+                  background: `
+                    linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                    linear-gradient(to left, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                    linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                    linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%)
+                  `
+                }}
+              ></div>
+            </div>
+          </motion.div>
+          
+          {/* Right side - Text content */}
+          <motion.div 
+            ref={textRef}
+            className="w-full lg:w-1/2 px-4 lg:px-4 order-1 lg:order-2 mb-6 lg:mb-0 flex items-center"
+            initial="hidden"
+            animate={textControls}
+            variants={textVariants}
+          >
+            <div className="lg:max-w-[500px]">
+              <p className="text-lg md:text-xl leading-relaxed mb-0 text-center lg:text-left">
+                $Aztec Coin is a treasure hunt rewarding those who understand the power of long-term holding. Built on the Solana network, it offers fast, low-cost transactions with a limited supply, ensuring both scarcity and real value.
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
   );
-};
-
-export default WhoWeAre; 
+}

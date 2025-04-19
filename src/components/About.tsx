@@ -1,103 +1,129 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import Image from 'next/image';
+import { motion, useAnimation } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 
 export default function About() {
+  const textControls = useAnimation();
+  const imageControls = useAnimation();
+  
+  const [textRef, textInView] = useInView({
+    triggerOnce: false,
+    threshold: 0.25,
+    rootMargin: "-100px 0px"
+  });
+  
+  const [imageRef, imageInView] = useInView({
+    triggerOnce: false,
+    threshold: 0.25,
+    rootMargin: "-100px 0px"
+  });
+
+  useEffect(() => {
+    if (textInView) {
+      textControls.start("visible");
+    } else {
+      textControls.start("hidden");
+    }
+  }, [textControls, textInView]);
+  
+  useEffect(() => {
+    if (imageInView) {
+      imageControls.start("visible");
+    } else {
+      imageControls.start("hidden");
+    }
+  }, [imageControls, imageInView]);
+
+  // Animation variants for text - slides up when scrolling
+  const textVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 100
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Animation variants for image - slides from right to left
+  const imageVariants = {
+    hidden: { 
+      opacity: 0,
+      x: 200
+    },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 1.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   return (
-    <section id="about" className="py-20 pt-24 relative section-boundary section-boundary-top">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/95 to-dark/90"></div>
-        
-        {/* Fade from black at the top to create continuity with WhoWeAre section */}
-        <div className="absolute top-0 left-0 right-0 h-[100px] bg-gradient-to-b from-black to-transparent"></div>
-      </div>
-      
-      {/* Visual section divider at top - always visible */}
-      <div className="absolute top-0 left-0 right-0 z-10">
-        {/* Soft glow effect */}
-        <div className="w-full h-[8px] bg-gradient-to-t from-primary/30 to-transparent"></div>
-        {/* Gold accent line */}
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
-      </div>
-
-      <div className="container mx-auto px-4 relative z-10 text-white">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-6xl font-bold mb-4 tracking-tight">
-            <span className="text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-yellow-500">Discover the Future of Cryptocurrency</span> with Aztec Coin
-          </h2>
-          <div className="w-32 h-1 bg-gradient-to-r from-primary to-yellow-500 mx-auto rounded-full"></div>
-        </div>
-
-        <div className="max-w-4xl mx-auto">
-          <h3 className="text-3xl font-bold mb-8 text-primary text-center tracking-wide">The Coin of Legends</h3>
+    <section className="bg-[#0A0A0A] text-white overflow-hidden relative" id="vision">
+      <div className="container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row items-center">
+          {/* Left side - Text content with upward animation */}
+          <motion.div 
+            ref={textRef}
+            className="w-full lg:w-1/2 px-4 lg:pr-8 order-1 flex items-center"
+            initial="hidden"
+            animate={textControls}
+            variants={textVariants}
+          >
+            <div className="lg:max-w-[500px] lg:ml-auto">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-primary text-center lg:text-left">Our Vision</h2>
+              <p className="text-lg md:text-xl leading-relaxed mb-0 text-center lg:text-left">
+                To build a community of forward-thinkers who value scarcity and long-term growth. By embracing Aztec Coin, you're not just investing in a cryptocurrency — you're embarking on a journey to uncover wealth through the power of limited supply.
+              </p>
+            </div>
+          </motion.div>
           
-          <div className="bg-dark/40 p-8 rounded-xl border border-primary/30 backdrop-blur-sm shadow-lg mb-10 transform hover:scale-[1.02] transition-transform duration-300">
-            <p className="text-xl mb-6 text-gray-100 text-center leading-relaxed">
-              Aztec Coin is more than just a cryptocurrency. It's your key to uncovering hidden wealth. Hold long-term and find your treasure as the value of Aztec Coin grows.
-            </p>
-            
-            <p className="text-xl mb-6 text-primary text-center font-bold">
-              Limited quantity with maximum value -- get your Aztec coin today.
-            </p>
-          </div>
-          
-          <div className="text-center mb-12">
-            <div className="inline-block bg-gradient-to-r from-primary/20 to-yellow-500/20 px-8 py-4 rounded-lg border border-primary/30">
-              <p className="text-2xl md:text-3xl text-primary font-bold tracking-wide">
-                $AZT – The Coin of Legends, Built for Kings & Crypto Warriors!
-              </p>
+          {/* Right side - Image with right-to-left animation */}
+          <motion.div 
+            ref={imageRef}
+            className="w-full lg:w-1/2 flex justify-end order-2 mt-12 lg:mt-0"
+            initial="hidden"
+            animate={imageControls}
+            variants={imageVariants}
+          >
+            <div className="relative w-full max-w-[680px] mr-0 overflow-hidden rounded-xl">
+              {/* Shadow effect */}
+              <div className="absolute inset-0 shadow-[inset_0_0_80px_50px_rgba(10,10,10,0.95)] z-20 pointer-events-none"></div>
+              
+              {/* Image */}
+              <Image
+                src="/images/about.jpg"
+                alt="Aztec Coin - Long Term Growth Vision"
+                width={680}
+                height={510}
+                priority
+                className="w-full h-auto max-h-[510px] z-10"
+              />
+              
+              {/* Edge gradient overlays */}
+              <div className="absolute inset-0 z-10 pointer-events-none"
+                style={{
+                  background: `
+                    linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                    linear-gradient(to left, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                    linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                    linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%)
+                  `
+                }}
+              ></div>
             </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-            <div className="bg-dark/40 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg">
-              <p className="text-lg text-gray-100 text-center leading-relaxed">
-                Aztec Coin is here to conquer the crypto world. Aztec Coin is here to claim its rightful place as the true ruler of the meme coin empire. Hold long-term, unlock treasures, and watch your riches grow.
-              </p>
-            </div>
-            <div className="bg-dark/40 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg">
-              <p className="text-lg text-gray-100 text-center leading-relaxed">
-                Aztec Coin is 100% community-driven and fully transparent.
-              </p>
-            </div>
-          </div>
-          
-          <div className="text-center mt-10 mb-16 bg-gradient-to-r from-primary/10 to-yellow-500/10 p-8 rounded-xl border border-primary/30">
-            <h4 className="text-3xl font-bold text-primary mb-6 tracking-wide">The Treasure Awaits, For Those Who Dare to Hold!</h4>
-            <p className="text-xl text-gray-100 italic">
-              The path to untold fortunes and hidden wealth, waiting for the true seekers to discover. Are you ready?
-            </p>
-          </div>
-          
-          {/* Feature grid section - currently commented out
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            <div className="bg-dark/50 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg hover:border-primary/50 transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary">Solana-Based</h4>
-              <p className="text-gray-300">
-                Fast, reliable, and low-cost transactions
-              </p>
-            </div>
-            <div className="bg-dark/50 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg hover:border-primary/50 transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary">Limited Supply</h4>
-              <p className="text-gray-300">
-                Only 15 million coins will ever exist
-              </p>
-            </div>
-            <div className="bg-dark/50 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg hover:border-primary/50 transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary">Community-Driven</h4>
-              <p className="text-gray-300">
-                100% transparent with no taxes and burnt liquidity
-              </p>
-            </div>
-            <div className="bg-dark/50 p-6 rounded-lg border border-primary/30 backdrop-blur-sm shadow-lg hover:border-primary/50 transition-all duration-300">
-              <h4 className="text-xl font-bold mb-2 text-primary">ATM Network</h4>
-              <p className="text-gray-300">
-                Zero-fee ATMs coming soon for easy access
-              </p>
-            </div>
-          </div>
-          */}
+          </motion.div>
         </div>
       </div>
     </section>

@@ -19,17 +19,6 @@ export default function ImageSection() {
         />
         {/* Dark overlay for readability */}
         <div className="absolute inset-0 bg-dark/60"></div>
-        
-        {/* Fade from black at the top to create continuity with previous section */}
-        <div className="absolute top-0 left-0 right-0 h-[100px] bg-gradient-to-b from-black to-transparent"></div>
-      </div>
-      
-      {/* Visual section divider at top - always visible */}
-      <div className="absolute top-0 left-0 right-0 z-10">
-        {/* Soft glow effect */}
-        <div className="w-full h-[8px] bg-gradient-to-t from-primary/30 to-transparent"></div>
-        {/* Gold accent line */}
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
       </div>
       
       {/* Content Container */}

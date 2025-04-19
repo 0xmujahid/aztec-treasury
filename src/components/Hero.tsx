@@ -2,28 +2,74 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, useAnimation } from "framer-motion";
 
 export default function Hero() {
   const [scrollY, setScrollY] = useState(0);
-  
+  const controls = useAnimation();
+  const [hasImageLoaded, setHasImageLoaded] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
-      setScrollY(window.scrollY);
+      const currentScroll = window.scrollY;
+      setScrollY(currentScroll);
+    
+      if (currentScroll > 5 && !hasScrolled) {  // Only set true if real scroll
+        setHasScrolled(true);
+      }
+    
+      if (currentScroll > 100 && !hasImageLoaded) {
+        setHasImageLoaded(true);
+        controls.start("visible");
+      }
+      
+      // Make image disappear when scrolling back to top
+      if (currentScroll < 50 && hasImageLoaded) {
+        setHasImageLoaded(false);
+        controls.start("hidden");
+      }
     };
     
     window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    // Backup timer for mobile only - longer delay to ensure scroll happens first
+    const timer = setTimeout(() => {
+      // Only if user hasn't scrolled after 2 seconds, show the image
+      if (!hasImageLoaded && window.innerWidth < 768) {
+        setHasImageLoaded(true);
+        controls.start("visible");
+      }
+    }, 2000);
+    
     handleScroll();
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      clearTimeout(timer);
     };
+  }, [hasImageLoaded, controls, hasScrolled]);
+
+  useEffect(() => {
+    // Check if we're on mobile
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024); // Match lg breakpoint
+    };
+    
+    // Initial check
+    checkMobile();
+    
+    // Add resize listener
+    window.addEventListener('resize', checkMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Calculate the transition effect based on scroll
-  const transitionStrength = Math.min(scrollY / 500, 1);
+  // Only apply text animation on desktop
+  const textLeftAnimation = isMobile ? 0 : Math.min(scrollY / 5, 250);
 
-  // Type-safe animation variants
   const meltingVariants: Variants = {
     initial: { 
       y: 0,
@@ -45,139 +91,134 @@ export default function Hero() {
 
   const text = "The Hidden Treasure of Cryptocurrency";
   const words = text.split(" ");
+
+  // Image animation variants
+  const imageVariants: Variants = {
+    hidden: { 
+      y: 400,
+      opacity: 0,
+      x: 0
+    },
+    visible: {
+      y: 0,
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 8,
+        damping: 7,
+        duration: 3,
+        delay: 0.6
+      }
+    }
+  };
+
+  // Keep text in the same initial position regardless of scroll state
+  const initialTextX = 150; // Start with a fixed offset to the right
+  
   return (
-    <section className="relative min-h-screen bg-dark text-white overflow-hidden pt-20 pb-24 section-boundary section-boundary-bottom">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-dark via-dark/70 to-dark"></div>
-      
-      {/* Background image with bottom shadow */}
-      <div className="absolute inset-0 opacity-70 z-0">
-        {/* Shadow container */}
-        <div className="relative w-full h-full after:absolute after:inset-x-0 after:bottom-0 after:h-8 after:bg-gradient-to-t after:from-black/20 after:to-transparent after:pointer-events-none">
-          <Image 
-            src="/images/header.jpg" 
-            alt="Aztec Treasury Background"
-            fill
-            style={{ objectFit: 'cover' }}
-            quality={100}
-            priority
-          />
-        </div>
-      </div>
-
-      {/* Visual section divider - always visible */}
-      <div className="absolute bottom-0 left-0 right-0 z-10">
-        {/* Gold accent line */}
-        <div className="w-full h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"></div>
-        {/* Soft glow effect */}
-        <div className="w-full h-[8px] bg-gradient-to-b from-primary/30 to-transparent"></div>
-      </div>
-
-      {/* Transition gradient to next section - gets stronger as user scrolls */}
-      <div 
-        className="section-transition-bottom transition-opacity duration-300"
-        style={{ opacity: transitionStrength }}
-      ></div>
-
-      {/* Section label */}
-     
-
+    <section className="relative min-h-screen bg-[#0A0A0A] text-white overflow-hidden pt-48 ">
       {/* Content */}
-      <div className="container mx-auto px-4 pt-20 pb-24 relative z-10 flex flex-col items-center">
-      <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-center">
-      {words.map((word, wordIndex) => (
-        <motion.span 
-          key={`word-${wordIndex}`}
-          className="inline-block mr-2"
-          initial="initial"
-          animate="animate"
-          custom={wordIndex}
-          variants={{
-            initial: { opacity: 1 },
-            animate: {
-              opacity: 1,
-              transition: {
-                staggerChildren: 0.05
-              }
-            }
-          }}
-        >
-          {word.split("").map((char, charIndex) => (
-            <motion.span
-              key={`char-${wordIndex}-${charIndex}`}
-              className={`inline-block ${wordIndex === 1 ? "text-primary" : ""}`}
-              variants={meltingVariants}
-              custom={charIndex}
+      <div className="container-fluid mx-auto pt-16 md:pt-24 pb-24 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center justify-between relative">
+          
+          {/* Create a fixed container for text positioning */}
+          <div className="w-full lg:w-1/2 px-4 lg:px-8 text-center lg:text-left relative z-10 order-1 lg:order-1 mt-0 mb-8 lg:mb-0 overflow-visible">
+            {/* Text container with right padding to ensure content remains visible when moving left */}
+            <motion.div 
+              className="relative z-10 lg:pr-24"
+              style={{ 
+                transform: isMobile ? 'translateX(0)' : `translateX(${initialTextX - textLeftAnimation}px)`,
+                transition: 'transform 0.1s linear'
+              }}
             >
-              {char === ' ' ? '\u00A0' : char}
-            </motion.span>
-          ))}
-        </motion.span>
-      ))}
-    </h1>
-        <div className="w-full max-w-3xl text-center">
-          <h2 className="text-xl md:text-2xl mb-6 font-light">
-          With a total supply of only 15 million coins, Aztec Coin is one of the lowest supply crypto in existence, even lower than Bitcoin.           </h2>
+              {/* Text background to ensure visibility */}
+              <div className="absolute inset-0 bg-[#0A0A0A]/70 backdrop-blur-sm -z-10 rounded-xl"></div>
+              
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-shadow-sm">
+                {words.map((word, wordIndex) => (
+                  <motion.span 
+                    key={`word-${wordIndex}`}
+                    className={`inline-block mr-2 ${wordIndex === 1 ? "text-primary block" : ""}`}
+                    initial="initial"
+                    animate="animate"
+                    custom={wordIndex}
+                    variants={{
+                      initial: { opacity: 1 },
+                      animate: {
+                        opacity: 1,
+                        transition: {
+                          staggerChildren: 0.05
+                        }
+                      }
+                    }}
+                  >
+                    {word.split("").map((char, charIndex) => (
+                      <motion.span
+                        key={`char-${wordIndex}-${charIndex}`}
+                        className="inline-block"
+                        variants={meltingVariants}
+                        custom={charIndex}
+                      >
+                        {char === ' ' ? '\u00A0' : char}
+                      </motion.span>
+                    ))}
+                  </motion.span>
+                ))}
+              </h1>
+              <h2 className="text-xl md:text-2xl mb-8 font-light text-shadow-sm mx-auto lg:mx-0" style={{ maxWidth: "90%", margin: isMobile ? "0 auto" : "0" }}>
+                With a total supply of only 15 million coins, Aztec Coin is one of the lowest supply crypto in existence, even lower than Bitcoin.
+              </h2>
 
-          <div className="relative">
-            {/* Shadow beneath coin */}
-            <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 w-32 h-6 bg-primary/30 rounded-full blur-md coin-shadow"></div>
-            
-            {/* Coin container with perspective for 3D effect */}
-            <div className="coin-container h-64 w-64 mx-auto my-8 perspective-1000">
-              {/* Coin wrapper - this rotates */}
-              <div className="coin-wrapper relative h-full w-full preserve-3d">
-                {/* Front of coin */}
-                <div className="absolute inset-0 backface-hidden coin-face">
-                  <Image 
-                    src="/images/New Logo for Aztec.png" 
-                    alt="Aztec Token Front"
-                    width={256}
-                    height={256}
-                    className="w-full h-full"
-                  />
-                </div>
-                
-                {/* Back of coin */}
-                <div className="absolute inset-0 backface-hidden rotate-y-180 coin-face">
-                  <Image 
-                    src="/images/New Logo for Aztec.png" 
-                    alt="Aztec Token Back"
-                    width={256}
-                    height={256}
-                    className="w-full h-full"
-                    style={{ transform: 'scaleX(-1)' }}
-                  />
-                </div>
+              <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center lg:justify-start">
+                <button className="bg-primary hover:bg-secondary text-dark font-bold py-3 px-8 rounded-full transition-all duration-300 transform hover:scale-105 active:scale-95 text-lg shadow-lg active:shadow-inner relative overflow-hidden mx-auto lg:mx-0">
+                  Buy AZTEC Now
+                </button>
               </div>
-            </div>
+            </motion.div>
           </div>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mt-16">
-            <button
-              className="
-                bg-primary hover:bg-secondary 
-                text-dark font-bold py-3 px-8 
-                rounded-full transition-all 
-                duration-300 transform 
-                hover:scale-105 active:scale-95
-                text-lg shadow-lg
-                active:shadow-inner
-                relative overflow-hidden
-              "
+          
+          {/* Image container - Fixed centered positioning */}
+          <div className="w-full lg:w-1/2 flex justify-center items-center order-2 lg:order-2 mb-6 lg:mb-0">
+            <motion.div 
+              className="w-full max-w-[680px] flex justify-center items-center"
+              initial="hidden"
+              animate={hasImageLoaded ? "visible" : "hidden"}
+              variants={imageVariants}
             >
-              Buy AZTEC Now
-            </button>
+              <div className="relative w-full max-w-[680px] overflow-hidden rounded-xl">
+                {/* Shadow effect */}
+                <div className="absolute inset-0 shadow-[inset_0_0_80px_50px_rgba(10,10,10,0.95)] z-20 pointer-events-none"></div>
+                
+                {/* Image */}
+                <Image
+                  src="/images/dynamic-data-visualization-3d.jpg"
+                  alt="Aztec Token"
+                  width={680}
+                  height={510}
+                  priority
+                  className="w-full h-auto max-h-[510px] z-10"
+                  style={{ 
+                    filter: 'brightness(1.3) contrast(1.2) saturate(1.1)'
+                  }}
+                />
+                
+                {/* Edge gradient overlays */}
+                <div className="absolute inset-0 z-10 pointer-events-none"
+                  style={{
+                    background: `
+                      linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                      linear-gradient(to left, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                      linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
+                      linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%)
+                    `
+                  }}
+                ></div>
+              </div>
+            </motion.div>
           </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
         </div>
       </div>
     </section>
   );
-} 
+}
