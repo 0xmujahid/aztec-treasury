@@ -89,7 +89,7 @@ export default function WhoWeAre() {
               
               {/* Image */}
               <Image
-                src="/images/balance.png"
+                src="/images/balance1.webp"
                 alt="Aztec Coin - Hidden Treasure"
                 width={680}
                 height={510}

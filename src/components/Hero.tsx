@@ -192,7 +192,7 @@ export default function Hero() {
                 
                 {/* Image */}
                 <Image
-                  src="/images/dynamic-data-visualization-3d.jpg"
+                  src="/images/hero1.webp"
                   alt="Aztec Token"
                   width={680}
                   height={510}
