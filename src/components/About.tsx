@@ -337,8 +337,8 @@ export default function About() {
                     <p className={`${playfair.className} text-xl md:text-2xl leading-relaxed text-center text-amber-100/80 italic`}>
                       The path to untold fortunes and hidden wealth, <br></br>
                       waiting for the true seekers to discover.
-                    </p>
-                  </div>
+              </p>
+            </div>
                   
                   {/* Feature points with gold icons */}
                   <div className="space-y-4">
@@ -347,8 +347,8 @@ export default function About() {
                         ARE YOU READY?
                       </h1>
                     </div>
-                  </div>
-                </div>
+            </div>
+            </div>
               </motion.div>
             </div>
           </div>

@@ -149,7 +149,7 @@ export default function HowToBuy() {
       {/* Background effects */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,203,5,0.08)_0%,rgba(0,0,0,0)_70%)] pointer-events-none"></div>
       
-      <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4">
         {/* Title with stylish font */}
         <motion.div
           className={`${cinzel.className} text-center mb-20`}
@@ -160,7 +160,7 @@ export default function HowToBuy() {
         >
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-transparent bg-clip-text bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-600 pb-2 inline-block">
             How to Buy $AZT Coin
-          </h2>
+        </h2>
           <div className="w-40 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto opacity-60 mt-4"></div>
         </motion.div>
         
@@ -219,8 +219,8 @@ export default function HowToBuy() {
                 </div>
                 <p className="text-blue-100/70 text-xs">
                   {steps[1].description}
-                </p>
-              </div>
+        </p>
+      </div>
             </div>
           </motion.div>
         </div>
@@ -282,18 +282,17 @@ export default function HowToBuy() {
                     {/* Central coin image */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="relative w-4/5 h-4/5">
-                        <Image
+                <Image
                           src="/images/coinimage.png"
                           alt="AZT Coin"
-                          fill
+                  fill
                           priority
-                          className="object-contain"
-                        />
-                      </div>
-                    </div>
-                    
+                  className="object-contain"
+                />
+              </div>
+          </div>
+  
                     {/* Rotating border */}
-                    <div className="absolute inset-0 rounded-full border-2 border-dashed border-amber-500/40 animate-spin-slow"></div>
                   </div>
                 </motion.div>
               </div>
@@ -352,7 +351,7 @@ export default function HowToBuy() {
                       </div>
                       <h3 className="text-lg lg:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-green-400">
                         {steps[2].title}
-                      </h3>
+              </h3>
                     </div>
                     <p className="text-emerald-100/70 text-xs lg:text-sm">
                       {steps[2].description}
@@ -390,8 +389,8 @@ export default function HowToBuy() {
                     </div>
                     <p className="text-amber-100/70 text-xs lg:text-sm">
                       {steps[3].description}
-                    </p>
-                  </div>
+            </p>
+          </div>
                 </div>
               </motion.div>
             </div>
@@ -431,7 +430,7 @@ export default function HowToBuy() {
             </div>
           </div>
         </div>
-        
+  
         {/* Bottom CTA */}
         <div ref={ctaRef} className="text-center pt-8 md:pt-12 pb-12 md:pb-16 px-4">
           <motion.div
@@ -491,6 +490,6 @@ export default function HowToBuy() {
           animation: spin-slow 20s linear infinite;
         }
       `}</style>
-    </section>
+  </section>
   );
 } 
