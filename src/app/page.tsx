@@ -8,10 +8,11 @@ import HowToBuy from '../components/HowToBuy';
 import ListedOn from '../components/ListedOn';
 import AtmFeature from '../components/AtmFeature';
 import Roadmap from '../components/Roadmap';
+import Footer from '../components/Footer';
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-dark">
+    <main className="min-h-screen bg-dark overflow-x-hidden w-full max-w-[100vw]">
       <Navbar />
       <Hero />
       <WhoWeAre />
@@ -21,6 +22,7 @@ export default function Home() {
       <Roadmap />
       <AtmFeature />
       <Tokenomics />
+      <Footer />
     </main>
   );
 }

@@ -145,9 +145,8 @@ export default function HowToBuy() {
   const ctaOpacity = useTransform(ctaScrollProgress, [0, 0.3], [0, 1]);
 
   return (
-    <section ref={sectionRef} className="bg-[#0A0A0A] text-white overflow-hidden relative py-20" id="howToBuy">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,203,5,0.08)_0%,rgba(0,0,0,0)_70%)] pointer-events-none"></div>
+    <section ref={sectionRef} className="bg-black text-white overflow-hidden relative py-20" id="howToBuy">
+      {/* Remove background gradient effect and use solid black */}
       
     <div className="container mx-auto px-4">
         {/* Title with stylish font */}
@@ -175,22 +174,28 @@ export default function HowToBuy() {
             }}
           >
             <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-              {/* Animated border */}
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-400/30 via-purple-500/30 to-purple-600/30 group-hover:from-purple-400/60 group-hover:via-purple-500/60 group-hover:to-purple-600/60 transition-all duration-500 animate-pulse"></div>
+              {/* Stylish border */}
+              <div className="absolute inset-0 rounded-xl border-2 border-purple-500/30 group-hover:border-purple-500/60 transition-all duration-500"></div>
               
-              {/* Card content */}
-              <div className="relative bg-black/60 backdrop-blur-sm p-4 rounded-xl h-full flex flex-col">
+              {/* Card content - fully transparent with stylish elements */}
+              <div className="relative backdrop-blur-sm p-4 rounded-xl h-full flex flex-col">
                 <div className={`${orbitron.className} flex items-center mb-2`}>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-purple-500/20">
                     1
                   </div>
-                  <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-400">
+                  <h3 className="text-lg font-bold text-white drop-shadow-md">
                     {steps[0].title}
                   </h3>
                 </div>
-                <p className="text-purple-100/70 text-xs">
+                <p className="text-amber-100/90 text-xs pl-10 border-l border-purple-500/20">
                   {steps[0].description}
                 </p>
+                
+                {/* Decorative corner elements */}
+                <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-purple-500/60 rounded-tl-md"></div>
+                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-purple-500/60 rounded-tr-md"></div>
+                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-purple-500/60 rounded-bl-md"></div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-purple-500/60 rounded-br-md"></div>
               </div>
             </div>
           </motion.div>
@@ -204,27 +209,33 @@ export default function HowToBuy() {
             }}
           >
             <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-              {/* Animated border */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 via-blue-500/30 to-cyan-600/30 group-hover:from-blue-400/60 group-hover:via-blue-500/60 group-hover:to-cyan-600/60 transition-all duration-500 animate-pulse"></div>
+              {/* Stylish border */}
+              <div className="absolute inset-0 rounded-xl border-2 border-blue-500/30 group-hover:border-blue-500/60 transition-all duration-500"></div>
               
-              {/* Card content */}
-              <div className="relative bg-black/60 backdrop-blur-sm p-4 rounded-xl h-full flex flex-col">
+              {/* Card content - fully transparent */}
+              <div className="relative backdrop-blur-sm p-4 rounded-xl h-full flex flex-col">
                 <div className={`${orbitron.className} flex items-center mb-2`}>
-                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-blue-500/20">
                     2
                   </div>
-                  <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-400">
+                  <h3 className="text-lg font-bold text-white drop-shadow-md">
                     {steps[1].title}
                   </h3>
                 </div>
-                <p className="text-blue-100/70 text-xs">
+                <p className="text-amber-100/90 text-xs pl-10 border-l border-blue-500/20">
                   {steps[1].description}
-        </p>
-      </div>
+                </p>
+                
+                {/* Decorative corner elements */}
+                <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-blue-500/60 rounded-tl-md"></div>
+                <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-blue-500/60 rounded-tr-md"></div>
+                <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-blue-500/60 rounded-bl-md"></div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-blue-500/60 rounded-br-md"></div>
+              </div>
             </div>
           </motion.div>
-        </div>
-        
+      </div>
+  
         {/* Central Image with surrounding cards in 5 positions - Desktop layout */}
         <div className="mb-20">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-6 relative max-w-5xl mx-auto">
@@ -239,22 +250,28 @@ export default function HowToBuy() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-                  {/* Animated border */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-400/30 via-purple-500/30 to-purple-600/30 group-hover:from-purple-400/60 group-hover:via-purple-500/60 group-hover:to-purple-600/60 transition-all duration-500 animate-pulse"></div>
+                  {/* Stylish border */}
+                  <div className="absolute inset-0 rounded-xl border-2 border-purple-500/30 group-hover:border-purple-500/60 transition-all duration-500"></div>
                   
-                  {/* Card content */}
-                  <div className="relative bg-black/60 backdrop-blur-sm p-6 rounded-xl h-full flex flex-col">
+                  {/* Card content - fully transparent */}
+                  <div className="relative backdrop-blur-sm p-6 rounded-xl h-full flex flex-col">
                     <div className={`${orbitron.className} flex items-center mb-3`}>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-purple-500/20">
                         1
                       </div>
-                      <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-400">
+                      <h3 className="text-xl font-bold text-white drop-shadow-md">
                         {steps[0].title}
                       </h3>
                     </div>
-                    <p className="text-purple-100/70 text-sm">
+                    <p className="text-amber-100/90 text-sm pl-11 border-l border-purple-500/20">
                       {steps[0].description}
                     </p>
+                    
+                    {/* Decorative corner elements */}
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-purple-500/60 rounded-tl-md"></div>
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-purple-500/60 rounded-tr-md"></div>
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-purple-500/60 rounded-bl-md"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-purple-500/60 rounded-br-md"></div>
                   </div>
                 </div>
               </motion.div>
@@ -276,23 +293,41 @@ export default function HowToBuy() {
                 >
                   <div className="aspect-square relative">
                     {/* Glowing circles behind */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 rounded-full bg-amber-500/20 filter blur-3xl animate-pulse"></div>
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/5 h-3/5 rounded-full bg-amber-500/30 filter blur-2xl animate-pulse" style={{ animationDelay: "300ms" }}></div>
+                  
                     
                     {/* Central coin image */}
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="relative w-4/5 h-4/5">
                 <Image
-                          src="/images/coinimage.png"
+                          src="/images/header2.jpg"
                           alt="AZT Coin"
-                  fill
+                          fill
                           priority
-                  className="object-contain"
-                />
-              </div>
-          </div>
-  
-                    {/* Rotating border */}
+                          className="object-contain relative z-10"
+                        />
+                        
+                        {/* Edge shadow effect - only on edges */}
+                        <div className="absolute inset-0 z-20 pointer-events-none" style={{
+                          background: 'transparent',
+                          boxShadow: 'none',
+                          borderImage: 'linear-gradient(to right, rgba(0,0,0,0.9), transparent 40%, transparent 60%, rgba(0,0,0,0.9)) 1'
+                        }}>
+                          {/* Left shadow */}
+                          <div className="absolute left-0 top-0 bottom-0 w-[40px] bg-gradient-to-r from-black to-transparent opacity-100"></div>
+                          
+                          {/* Right shadow */}
+                          <div className="absolute right-0 top-0 bottom-0 w-[40px] bg-gradient-to-l from-black to-transparent opacity-100"></div>
+                          
+                          {/* Top shadow */}
+                          <div className="absolute top-0 left-0 right-0 h-[40px] bg-gradient-to-b from-black to-transparent opacity-100"></div>
+                          
+                          {/* Bottom shadow */}
+                          <div className="absolute bottom-0 left-0 right-0 h-[40px] bg-gradient-to-t from-black to-transparent opacity-100"></div>
+                        </div>
+                        
+                        {/* Remove the vignette effect that was darkening the whole image */}
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
               </div>
@@ -308,30 +343,36 @@ export default function HowToBuy() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-                  {/* Animated border */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 via-blue-500/30 to-cyan-600/30 group-hover:from-blue-400/60 group-hover:via-blue-500/60 group-hover:to-cyan-600/60 transition-all duration-500 animate-pulse"></div>
+                  {/* Stylish border */}
+                  <div className="absolute inset-0 rounded-xl border-2 border-blue-500/30 group-hover:border-blue-500/60 transition-all duration-500"></div>
                   
-                  {/* Card content */}
-                  <div className="relative bg-black/60 backdrop-blur-sm p-6 rounded-xl h-full flex flex-col">
+                  {/* Card content - fully transparent */}
+                  <div className="relative backdrop-blur-sm p-6 rounded-xl h-full flex flex-col">
                     <div className={`${orbitron.className} flex items-center mb-3`}>
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-blue-500/20">
                         2
                       </div>
-                      <h3 className="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-cyan-400">
+                      <h3 className="text-xl font-bold text-white drop-shadow-md">
                         {steps[1].title}
                       </h3>
                     </div>
-                    <p className="text-blue-100/70 text-sm">
+                    <p className="text-amber-100/90 text-sm pl-11 border-l border-blue-500/20">
                       {steps[1].description}
                     </p>
+                    
+                    {/* Decorative corner elements */}
+                    <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-blue-500/60 rounded-tl-md"></div>
+                    <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-blue-500/60 rounded-tr-md"></div>
+                    <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-blue-500/60 rounded-bl-md"></div>
+                    <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-blue-500/60 rounded-br-md"></div>
                   </div>
                 </div>
               </motion.div>
-            </div>
-            
+          </div>
+  
             {/* Middle row: Card 3 (bottom-left) | Empty | Card 4 (bottom-right) */}
             {/* Card 3 - Bottom Left */}
-            <div className="w-full  lg:mb-0 lg:mt-0">
+            <div className="w-full lg:mb-0 lg:mt-0">
               <motion.div 
                 className="group max-w-[85%] mx-auto lg:max-w-full transform-gpu"
                 style={{ 
@@ -340,22 +381,28 @@ export default function HowToBuy() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-                  {/* Animated border */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/30 via-emerald-500/30 to-green-600/30 group-hover:from-emerald-400/60 group-hover:via-emerald-500/60 group-hover:to-green-600/60 transition-all duration-500 animate-pulse"></div>
+                  {/* Stylish border */}
+                  <div className="absolute inset-0 rounded-xl border-2 border-emerald-500/30 group-hover:border-emerald-500/60 transition-all duration-500"></div>
                   
-                  {/* Card content */}
-                  <div className="relative bg-black/60 backdrop-blur-sm p-4 lg:p-6 rounded-xl h-full flex flex-col">
+                  {/* Card content - fully transparent */}
+                  <div className="relative backdrop-blur-sm p-4 lg:p-6 rounded-xl h-full flex flex-col">
                     <div className={`${orbitron.className} flex items-center mb-2 lg:mb-3`}>
-                      <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                      <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-emerald-500/20">
                         3
-                      </div>
-                      <h3 className="text-lg lg:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-300 to-green-400">
+              </div>
+                      <h3 className="text-lg lg:text-xl font-bold text-white drop-shadow-md">
                         {steps[2].title}
               </h3>
                     </div>
-                    <p className="text-emerald-100/70 text-xs lg:text-sm">
+                    <p className="text-amber-100/90 text-xs lg:text-sm pl-10 lg:pl-11 border-l border-emerald-500/20">
                       {steps[2].description}
                     </p>
+                    
+                    {/* Decorative corner elements */}
+                    <div className="absolute top-0 left-0 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-l-2 border-emerald-500/60 rounded-tl-md"></div>
+                    <div className="absolute top-0 right-0 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-r-2 border-emerald-500/60 rounded-tr-md"></div>
+                    <div className="absolute bottom-0 left-0 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-l-2 border-emerald-500/60 rounded-bl-md"></div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-r-2 border-emerald-500/60 rounded-br-md"></div>
                   </div>
                 </div>
               </motion.div>
@@ -365,7 +412,7 @@ export default function HowToBuy() {
             <div className="hidden lg:block"></div>
             
             {/* Card 4 - Bottom Right */}
-            <div className="w-full  lg:mb-0 lg:mt-0">
+            <div className="w-full lg:mb-0 lg:mt-0">
               <motion.div 
                 className="group max-w-[85%] mx-auto lg:max-w-full transform-gpu"
                 style={{ 
@@ -374,29 +421,35 @@ export default function HowToBuy() {
                 }}
               >
                 <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-                  {/* Animated border */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-400/30 via-amber-500/30 to-yellow-600/30 group-hover:from-amber-400/60 group-hover:via-amber-500/60 group-hover:to-yellow-600/60 transition-all duration-500 animate-pulse"></div>
+                  {/* Stylish border */}
+                  <div className="absolute inset-0 rounded-xl border-2 border-amber-500/30 group-hover:border-amber-500/60 transition-all duration-500"></div>
                   
-                  {/* Card content */}
-                  <div className="relative bg-black/60 backdrop-blur-sm p-4 lg:p-6 rounded-xl h-full flex flex-col">
+                  {/* Card content - fully transparent */}
+                  <div className="relative backdrop-blur-sm p-4 lg:p-6 rounded-xl h-full flex flex-col">
                     <div className={`${orbitron.className} flex items-center mb-2 lg:mb-3`}>
-                      <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                      <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-amber-500/20">
                         4
                       </div>
-                      <h3 className="text-lg lg:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-yellow-400">
+                      <h3 className="text-lg lg:text-xl font-bold text-white drop-shadow-md">
                         {steps[3].title}
                       </h3>
                     </div>
-                    <p className="text-amber-100/70 text-xs lg:text-sm">
+                    <p className="text-amber-100/90 text-xs lg:text-sm pl-10 lg:pl-11 border-l border-amber-500/20">
                       {steps[3].description}
-            </p>
-          </div>
+                    </p>
+                    
+                    {/* Decorative corner elements */}
+                    <div className="absolute top-0 left-0 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-l-2 border-amber-500/60 rounded-tl-md"></div>
+                    <div className="absolute top-0 right-0 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-r-2 border-amber-500/60 rounded-tr-md"></div>
+                    <div className="absolute bottom-0 left-0 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-l-2 border-amber-500/60 rounded-bl-md"></div>
+                    <div className="absolute bottom-0 right-0 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-r-2 border-amber-500/60 rounded-br-md"></div>
+                  </div>
                 </div>
               </motion.div>
-            </div>
-            
+          </div>
+  
             {/* Bottom row for Card 5 centered */}
-            <div className="col-span-1 lg:col-span-3  lg:mb-0 lg:mt-2">
+            <div className="col-span-1 lg:col-span-3 lg:mb-0 lg:mt-2">
               <div className="w-full flex justify-center">
                 {/* Card 5 - Below Image and centered */}
                 <motion.div 
@@ -407,22 +460,28 @@ export default function HowToBuy() {
                   }}
                 >
                   <div className="relative overflow-hidden rounded-xl p-[1px] h-full">
-                    {/* Animated border */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-red-400/30 via-red-500/30 to-orange-600/30 group-hover:from-red-400/60 group-hover:via-red-500/60 group-hover:to-orange-600/60 transition-all duration-500 animate-pulse"></div>
+                    {/* Stylish border */}
+                    <div className="absolute inset-0 rounded-xl border-2 border-red-500/30 group-hover:border-red-500/60 transition-all duration-500"></div>
                     
-                    {/* Card content */}
-                    <div className="relative bg-black/60 backdrop-blur-sm p-4 lg:p-6 rounded-xl h-full flex flex-col">
+                    {/* Card content - fully transparent */}
+                    <div className="relative backdrop-blur-sm p-4 lg:p-6 rounded-xl h-full flex flex-col">
                       <div className={`${orbitron.className} flex items-center mb-2 lg:mb-3 justify-center`}>
-                        <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center text-white text-sm font-bold mr-3">
+                        <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center text-white text-sm font-bold mr-3 shadow-lg shadow-red-500/20">
                           5
                         </div>
-                        <h3 className="text-lg lg:text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-300 to-orange-400">
+                        <h3 className="text-lg lg:text-xl font-bold text-white drop-shadow-md">
                           {steps[4].title}
                         </h3>
                       </div>
-                      <p className="text-red-100/70 text-xs lg:text-sm text-center">
+                      <p className="text-amber-100/90 text-xs lg:text-sm text-center border-b border-red-500/20 pb-2">
                         {steps[4].description}
                       </p>
+                      
+                      {/* Decorative corner elements */}
+                      <div className="absolute top-0 left-0 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-l-2 border-red-500/60 rounded-tl-md"></div>
+                      <div className="absolute top-0 right-0 w-3 h-3 lg:w-4 lg:h-4 border-t-2 border-r-2 border-red-500/60 rounded-tr-md"></div>
+                      <div className="absolute bottom-0 left-0 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-l-2 border-red-500/60 rounded-bl-md"></div>
+                      <div className="absolute bottom-0 right-0 w-3 h-3 lg:w-4 lg:h-4 border-b-2 border-r-2 border-red-500/60 rounded-br-md"></div>
                     </div>
                   </div>
                 </motion.div>

@@ -3,7 +3,14 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Bangers } from 'next/font/google';
 
+const bangers = Bangers({ 
+  subsets: ['latin'],
+  weight: ['400']
+});
+
+  
 const Navbar = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -40,10 +47,11 @@ const Navbar = () => {
 
   const navLinks = [
     { name: 'Home', href: '#' },
-    { name: 'About', href: '#about' },
-    { name: 'How to Buy', href: '#how-to-buy' },
+    { name: 'About', href: '#vision' },
+    { name: 'Buy', href: '#howToBuy' },
     { name: 'Roadmap', href: '#roadmap' },
     { name: 'Tokenomics', href: '#tokenomics' },
+    { name: 'ATM', href: '#atm' },
   ];
 
   return (
@@ -64,7 +72,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
             <Link href="#" className="flex items-center">
-              <div className="relative w-40 h-40 ml-20">
+              <div className="relative w-40 h-40 md:ml-40 lg:ml-40  xl:ml-40 2xl:ml-40 sm:ml-40">
                 <Image 
                   src="/images/New Logo for Aztec.png" 
                   alt="Aztec Coin Logo" 
@@ -76,23 +84,16 @@ const Navbar = () => {
           </div>
           
           {/* Desktop Navigation */}
-          <div className="hidden md:block mr-20">
+          <div className="hidden md:block mr-48">
             <div className="ml-10 flex items-center space-x-8">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-gray-300 hover:text-primary transition-colors duration-200 font-medium"
-                >
+                  className={`${bangers.className} text-gray-300 hover:text-primary transition-colors duration-200 font-bold`}                >
                   {link.name}
                 </Link>
               ))}
-              <a
-                href="#"
-                className="bg-primary hover:bg-secondary text-dark font-bold py-2 px-5 rounded-full transition-all duration-300 transform hover:scale-105 text-sm"
-              >
-                Buy Now
-              </a>
             </div>
           </div>
           
@@ -131,13 +132,6 @@ const Navbar = () => {
               {link.name}
             </Link>
           ))}
-          <a
-            href="#"
-            className="bg-primary hover:bg-secondary text-dark font-bold py-2 px-5 rounded-full transition-all duration-300 block w-full text-center mt-4"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Buy Now
-          </a>
         </div>
       </div>
     </nav>

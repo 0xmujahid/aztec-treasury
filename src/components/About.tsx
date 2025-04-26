@@ -2,9 +2,9 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { Cinzel, Playfair_Display } from 'next/font/google';
+import { Cinzel, Playfair_Display ,Orbitron, Rubik} from 'next/font/google';
 
 // Load custom fonts
 const cinzel = Cinzel({ 
@@ -17,9 +17,33 @@ const playfair = Playfair_Display({
   weight: ['400', '500', '700']
 });
 
+const orbitron = Orbitron({ 
+  subsets: ['latin'],
+  weight: ['500']
+});
+
+const rubik = Rubik({ 
+  subsets: ['latin'],
+  weight: ['700']
+});
+
 export default function About() {
   // State for window width
   const [isMobile, setIsMobile] = useState(false);
+  // State for scroll position
+  const [scrollY, setScrollY] = useState(0);
+  
+  // Effect to track scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrollY(window.scrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll(); // Initial call
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   
   // Effect to detect mobile
   useEffect(() => {
@@ -38,12 +62,75 @@ export default function About() {
   }, []);
 
   // Main section animations
-  const [textRef, textInView] = useInView({
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const textContainerRef = useRef<HTMLDivElement | null>(null);
+  
+  // Track when section enters viewport to enable animation
+  const [inViewRef, inView] = useInView({
+    threshold: 0.1,
     triggerOnce: false,
-    threshold: 0.25,
-    rootMargin: "-100px 0px"
   });
   
+  // Set refs for both section and inView
+  const setRefs = React.useCallback(
+    (node: HTMLElement | null) => {
+      // Ref for the section
+      sectionRef.current = node;
+      // Ref for inView
+      inViewRef(node);
+    },
+    [inViewRef]
+  );
+  
+  // Calculate section position for determining animation progress
+  const [sectionTop, setSectionTop] = useState(0);
+  const [sectionHeight, setSectionHeight] = useState(0);
+  
+  useEffect(() => {
+    if (sectionRef.current && inView) {
+      const rect = sectionRef.current.getBoundingClientRect();
+      setSectionTop(rect.top + window.scrollY);
+      setSectionHeight(rect.height);
+    }
+  }, [inView, scrollY]);
+  
+  // Calculate scroll progress through the section
+  const calculateScrollProgress = () => {
+    if (!sectionHeight) return 0;
+    
+    // Distance scrolled past the section start
+    const scrolledDistance = Math.max(0, scrollY - sectionTop + window.innerHeight/2);
+    // Convert to a 0-1 progress value
+    const progress = Math.min(1, Math.max(0, scrolledDistance / (sectionHeight + window.innerHeight/2)));
+    
+    return progress;
+  };
+  
+  const scrollProgress = calculateScrollProgress();
+  
+
+  // Scroll tracking for that section
+  const { scrollYProgress } = useScroll({
+    target: textContainerRef,
+    offset: ["start 0.9", "start 0.3"]
+    });
+  // Calculate text Y position based on scroll progress
+  const textYPosition = useTransform(scrollYProgress, [0, 0.3], 
+    isMobile ? [30, 0] : [100, -100]  // Keep mobile text in visible range with minimal movement
+  );
+  const textOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  const smoothY = useSpring(textYPosition, {
+    stiffness: 50,
+    damping: 30,
+    mass: 1.2,
+  });
+  const smoothOpacity = useSpring(textOpacity, {
+    stiffness: 60,
+    damping: 30,
+  });
+  
+  
+  // Image section animation stays the same
   const [imageRef, imageInView] = useInView({
     triggerOnce: false,
     threshold: 0.25,
@@ -55,54 +142,51 @@ export default function About() {
     {
       id: 1,
       image: "/images/card1.webp",
-      title: "Limited Quantity, Maximum Value",
-      description: "Only 15 million $AZT coins exist, creating true digital scarcity in a market of abundance."
+      title: "Limited Quantity, Maximum Value"
     },
     {
       id: 2,
       image: "/images/card2.webp",
-      title: "$AZT – The Coin of Legends",
-      description: "Built for Kings & Crypto Warriors seeking long-term wealth preservation and growth."
+      title: "$AZT – The Coin of Legends"
     },
     {
       id: 3,
       image: "/images/card3.webp",
-      title: "Community-Driven Power",
-      description: "Join a movement of forward-thinkers who understand the true value of digital scarcity."
+      title: "Community-Driven Power"
     }
   ];
 
   // Reference for cards container
-  const cardsRef = useRef(null);
+  const cardsRef = useRef<HTMLDivElement | null>(null);
   
   // Get scroll progress relative to cards container
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: cardsScrollProgress } = useScroll({
     target: cardsRef,
     offset: ["start end", "end start"]
   });
   
   // Transform scroll progress to Y value (movement range)
-  const y = useTransform(scrollYProgress, [0, 1], [400, -200]);
+  const cardsY = useTransform(cardsScrollProgress, [0, 1], [400, -200]);
   
   // Reference for scaling text container
-  const scalingTextRef = useRef(null);
+  const scalingTextRef = useRef<HTMLDivElement | null>(null);
   
   // Separate scroll tracking for the scaling text
-  const { scrollYProgress: textScrollProgress } = useScroll({
+  const { scrollYProgress: scalingTextScrollProgress } = useScroll({
     target: scalingTextRef,
     offset: ["start end", "end start"]
   });
   
   // Create more mobile-friendly scale effect for text
   const textScaleX = useTransform(
-    textScrollProgress, 
+    scalingTextScrollProgress, 
     [0, 0.5], 
     [isMobile ? 0.9 : 0.85, 1.0]
   );
-  const textOpacity = useTransform(textScrollProgress, [0, 0.3], [0, 1]);
+  const scalingTextOpacity = useTransform(scalingTextScrollProgress, [0, 0.3], [0, 1]);
 
   // Reference for rotation image and text section
-  const rotationSectionRef = useRef(null);
+  const rotationSectionRef = useRef<HTMLDivElement | null>(null);
   
   // Scroll tracking for rotation section
   const { scrollYProgress: rotationScrollProgress } = useScroll({
@@ -119,65 +203,83 @@ export default function About() {
   const textX = useTransform(rotationScrollProgress, [0.1, 0.6], [300, 0]);
   const textOpacity2 = useTransform(rotationScrollProgress, [0.1, 0.4], [0, 1]);
 
+  // Ensure mobile animation stays visible
+  useEffect(() => {
+    // Reset any extreme positions on mobile devices
+    if (isMobile && textContainerRef.current) {
+      textContainerRef.current.style.transform = 'none';
+    }
+  }, [isMobile]);
+
   return (
-    <section className="bg-[#0A0A0A] text-white overflow-hidden relative" id="vision">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col lg:flex-row items-center ">
-          {/* Left side - Text content with upward animation */}
+    <section ref={setRefs} className="bg-black text-white overflow-hidden relative pt-24 md:pt-16 pb-32 w-screen max-w-[100vw]" id="vision">
+      <div className="container mx-auto px-4 overflow-x-hidden w-full">
+        <div className="flex flex-col lg:flex-row items-center overflow-hidden w-full">
+          {/* Left side - Text content with scroll-based upward animation */}
           <motion.div 
-            ref={textRef}
-            className="w-full lg:w-1/2 px-4 lg:pr-8 order-1 flex items-center"
-            initial={{ opacity: 0, y: 100 }}
-            animate={{ 
-              opacity: textInView ? 1 : 0, 
-              y: textInView ? 0 : 100 
+            ref={textContainerRef}
+            className="w-full lg:w-1/2 px-2 sm:px-4 lg:px-6 order-1 flex items-center mb-12 lg:mb-0 overflow-hidden z-10 mt-8 md:mt-0"
+            style={{ 
+              y: isMobile ? 0 : smoothY, // Disable y animation on mobile completely
+              opacity: smoothOpacity
             }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
           >
-            <div className="lg:max-w-[500px] lg:ml-auto">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-primary text-center lg:text-left">Our Vision</h2>
-              <p className="text-lg md:text-xl leading-relaxed mb-0 text-center lg:text-left">
-                To build a community of forward-thinkers who value scarcity and long-term growth. By embracing Aztec Coin, you're not just investing in a cryptocurrency — you're embarking on a journey to uncover wealth through the power of limited supply.
+            <div className="lg:max-w-[500px] lg:ml-auto w-full px-1 overflow-hidden relative z-10">
+              <h2 className={`${orbitron.className} text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-center lg:text-left text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-500 to-amber-300 break-words`}>
+                Our Vision
+              </h2>
+              <div className="h-1 w-12 md:w-24 bg-gradient-to-r from-amber-300 to-yellow-600 rounded-full mb-6 mx-auto lg:mx-0"></div>
+              <p className={`${rubik.className} text-lg md:text-xl leading-relaxed mb-6 text-center lg:text-left font-light text-gray-100 break-words`}>
+                To build a community of <span className="text-amber-300 font-medium">forward-thinkers</span> who value scarcity and long-term growth. By embracing Aztec Coin, you're not just investing in a cryptocurrency — you're embarking on a journey to uncover wealth through the power of limited supply.
+              </p>
+              <p className="text-base md:text-lg leading-relaxed text-center lg:text-left text-gray-300 italic break-words">
+                <span className={`text-amber-200 font-medium ${rubik.className}`}>$AZT</span> - Where vision meets value.
               </p>
             </div>
           </motion.div>
           
-          {/* Right side - Image with right-to-left animation */}
+          {/* Right side - Image with new animation */}
           <motion.div 
             ref={imageRef}
-            className="w-full lg:w-1/2 flex justify-end order-2 mt-12 lg:mt-0"
-            initial={{ opacity: 0, x: 200 }}
+            className="w-full lg:w-[55%] flex justify-center lg:justify-start order-2 mt-0 lg:mt-0 p-0 overflow-hidden"
+            initial={{ opacity: 0, scale: 0.9, filter: "blur(10px)" }}
             animate={{ 
               opacity: imageInView ? 1 : 0, 
-              x: imageInView ? 0 : 200 
+              scale: imageInView ? 1 : 0.9,
+              filter: imageInView ? "blur(0px)" : "blur(10px)"
             }}
-            transition={{ duration: 1.5, ease: "easeOut" }}
+            transition={{ duration: 1.2, ease: [0.25, 0.1, 0.25, 1.0] }}
           >
-            <div className="relative w-full max-w-[680px] mr-0 overflow-hidden rounded-xl">
-              {/* Shadow effect */}
-              <div className="absolute inset-0 shadow-[inset_0_0_80px_50px_rgba(10,10,10,0.95)] z-20 pointer-events-none"></div>
+            <div className="relative w-full max-w-[100%] overflow-hidden max-h-[70vh] md:max-h-none">
+              {/* Image with black shadow for blending - Full height */}
+              <div className="relative w-full h-full overflow-hidden">
+                <Image
+                  src="/images/about.jpg"
+                  alt="Aztec Coin - Long Term Growth Vision"
+                  width={900}
+                  height={900}
+                  priority
+                  className="w-full h-auto z-10 object-cover"
+                  style={{ minHeight: isMobile ? "350px" : "560px" }}
+                />
+                
+                {/* Enhanced black shadow overlay for edge blending - stronger on all sides */}
+                <div className="absolute inset-0 pointer-events-none" style={{
+                  background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.9) 100%)',
+                  mixBlendMode: 'multiply',
+                  zIndex: 20
+                }}></div>
+              </div>
               
-              {/* Image */}
-              <Image
-                src="/images/about.jpg"
-                alt="Aztec Coin - Long Term Growth Vision"
-                width={680}
-                height={510}
-                priority
-                className="w-full h-auto max-h-[510px] z-10"
-              />
-              
-              {/* Edge gradient overlays */}
-              <div className="absolute inset-0 z-10 pointer-events-none"
-                style={{
-                  background: `
-                    linear-gradient(to right, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
-                    linear-gradient(to left, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
-                    linear-gradient(to bottom, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%),
-                    linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.5) 10%, rgba(10,10,10,0) 30%)
-                  `
-                }}
-              ></div>
+              {/* Stronger edge shadows on all four sides */}
+              <div className="absolute inset-0 z-20 pointer-events-none" style={{
+                boxShadow: `
+                inset 120px 0px 80px -20px rgba(0,0,0,0.85),   /* Left - strong */
+                inset -120px 0px 80px -20px rgba(0,0,0,0.85),  /* Right - strong */
+                inset 0px 120px 80px -40px rgba(0,0,0,0.7),    /* Bottom - more visible */
+                inset 0px -120px 80px -40px rgba(0,0,0,0.7)    /* Top - more visible */
+                `
+              }}></div>
             </div>
           </motion.div>
         </div>
@@ -185,69 +287,96 @@ export default function About() {
         {/* Cards section */}
         <div 
           ref={cardsRef}
-          className="px-4 sm:px-8 lg:px-16 mb-20 relative"
+          className="px-4 sm:px-6 lg:px-8 mb-20 relative"
         >
           {/* Centered container with max width for cards */}
           <div className="max-w-6xl mx-auto">
             <motion.div 
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-6"
-              style={{ y }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-8"
+              style={{ y: cardsY }}
             >
               {cards.map((card) => (
                 <div key={card.id} className="flex justify-center">
-                  {/* Card with golden glow effect and gradient border */}
+                  {/* Card with new border style */}
                   <div 
-                    className="relative rounded-2xl h-[260px] w-full max-w-[260px] flex flex-col group"
+                    className="relative rounded-2xl h-[240px] w-full max-w-[240px] flex flex-col group transition-all duration-300 hover:scale-105"
                     style={{
                       background: "linear-gradient(145deg, #121214 0%, #0A0A0F 100%)",
-                      boxShadow: "0 10px 30px rgba(250, 203, 5, 0.15)"
+                      boxShadow: "0 10px 25px -5px rgba(250, 203, 5, 0.07), 0 8px 10px -6px rgba(250, 203, 5, 0.1)"
                     }}
                   >
-                    {/* Animated gradient border */}
-                    <div className="absolute inset-0 rounded-2xl p-[2px] bg-gradient-to-br from-yellow-400 via-yellow-500 to-amber-600 opacity-50 group-hover:opacity-80 transition-opacity duration-300" style={{ zIndex: 1 }}>
-                      <div className="h-full w-full rounded-2xl bg-black"></div>
+                    {/* New border style - double border with animation */}
+                    <div className="absolute inset-0 rounded-2xl" style={{ zIndex: 1 }}>
+                      {/* Outer border - thin golden line */}
+                      <div className="absolute inset-0 rounded-2xl border border-yellow-500/40 group-hover:border-yellow-400/70 transition-colors duration-300"></div>
+                      
+                      {/* Inner border - with gap and corner accents */}
+                      <div className="absolute inset-[3px] rounded-xl border border-amber-600/30 group-hover:border-amber-500/50 transition-colors duration-300"></div>
+                      
+                      {/* Corner accents - top left */}
+                      <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-yellow-400/60 rounded-tl-lg"></div>
+                      
+                      {/* Corner accents - top right */}
+                      <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-yellow-400/60 rounded-tr-lg"></div>
+                      
+                      {/* Corner accents - bottom left */}
+                      <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-yellow-400/60 rounded-bl-lg"></div>
+                      
+                      {/* Corner accents - bottom right */}
+                      <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-yellow-400/60 rounded-br-lg"></div>
                     </div>
                     
                     {/* Container for the image with positioning */}
                     <div className="relative w-full h-[120px] overflow-visible" style={{ zIndex: 2 }}>
-                      {/* Image with centered positioning and glow effect */}
+                      {/* Image with centered positioning and enhanced shadow similar to About section */}
                       <div 
-                        className="absolute w-[130px] h-[130px] top-[-30px] left-1/2 transform -translate-x-1/2 z-10 group-hover:scale-105 transition-transform duration-300"
+                        className="absolute w-[120px] h-[120px] top-[-25px] left-1/2 transform -translate-x-1/2 z-10 group-hover:scale-105 transition-transform duration-300 rounded-xl overflow-hidden"
                         style={{ 
-                          filter: "drop-shadow(0 0 12px rgba(250, 203, 5, 0.2))",
+                          filter: "drop-shadow(0 10px 15px rgba(250, 203, 5, 0.15))"
                         }}
                       >
+                        <div className="absolute inset-0 bg-black opacity-20 z-10 mix-blend-overlay"></div>
         <Image 
                           src={card.image}
                           alt={card.title}
                           fill
                           priority
-                          className="object-contain"
+                          className="object-contain z-5 p-1.5"
+                          style={{
+                            background: "linear-gradient(145deg, rgba(18,18,20,0.6), rgba(10,10,15,0.9))"
+                          }}
                         />
+                        
+                        {/* Advanced shadow effect like in About section */}
+                        <div className="absolute inset-0 z-20 pointer-events-none" style={{
+                          boxShadow: `
+                          inset 40px 0px 30px -15px rgba(0,0,0,0.75),   /* Left shadow */
+                          inset -40px 0px 30px -15px rgba(0,0,0,0.75),  /* Right shadow */
+                          inset 0px 40px 30px -15px rgba(0,0,0,0.7),    /* Top shadow */
+                          inset 0px -40px 30px -15px rgba(0,0,0,0.7)    /* Bottom shadow */
+                          `
+                        }}></div>
                       </div>
                       
-                      {/* Background glow effect */}
-                      <div 
-                        className="absolute top-[-20px] left-1/2 transform -translate-x-1/2 w-[100px] h-[100px] rounded-full opacity-20 blur-2xl group-hover:opacity-40 transition-opacity duration-300" 
-                        style={{ background: "radial-gradient(circle, rgba(250, 203, 5, 1) 0%, rgba(250, 203, 5, 0) 70%)" }}
-                      ></div>
-                      
-                      {/* Dark vignette effect */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-5 pointer-events-none"></div>
+                      {/* Dark vignette effect - now uses the advanced shadow technique */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent z-5 pointer-events-none" 
+                           style={{ backdropFilter: "blur(1px)" }}></div>
                     </div>
                     
                     {/* Text section at bottom with gradient highlight */}
-                    <div className="flex-1 flex flex-col justify-center items-center p-3 rounded-b-2xl relative z-5">
-                      <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-500 text-center group-hover:from-yellow-300 group-hover:to-amber-400 transition-all duration-300">
+                    <div className="flex-1 flex flex-col justify-center items-center p-4 rounded-b-2xl relative z-5">
+                      <h3 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 text-center group-hover:from-yellow-200 group-hover:to-amber-400 transition-all duration-300 mb-2 px-2 py-1 rounded bg-black/80 backdrop-blur-sm border border-yellow-600/20"
+                          style={{ boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(250, 203, 5, 0.05)" }}>
                         {card.title}
                       </h3>
                       
-                      {/* Optional decorative elements */}
-                      <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-yellow-500 to-transparent opacity-30"></div>
+                      {/* Optional decorative elements - smoother gradient */}
+                      <div className="absolute bottom-0 left-0 w-full h-[1px]" 
+                           style={{ background: "linear-gradient(90deg, rgba(250, 203, 5, 0) 0%, rgba(250, 203, 5, 0.3) 50%, rgba(250, 203, 5, 0) 100%)" }}></div>
                     </div>
                     
                     {/* Hover animation effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-700 to-amber-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300" style={{ zIndex: 0 }}></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-yellow-700 to-amber-600 opacity-0 group-hover:opacity-5 transition-opacity duration-300 rounded-2xl" style={{ zIndex: 0 }}></div>
                   </div>
                 </div>
               ))}
@@ -258,20 +387,18 @@ export default function About() {
         {/* Scaling Text Section */}
         <div 
           ref={scalingTextRef}
-          className="py-12 px-4 sm:px-8 min-h-[300px] flex items-center justify-center overflow-hidden"
-          style={{
-            background: "linear-gradient(180deg, rgba(250,203,5,0.02) 0%, rgba(250,203,5,0.08) 50%, rgba(250,203,5,0.02) 100%)"
-          }}
+          className="py-12 px-4 bg-black sm:px-8 min-h-[300px] flex items-center justify-center overflow-hidden"
+         
         >
           <motion.div 
             className="max-w-4xl text-center"
             style={{ 
               scale: textScaleX,
-              opacity: textOpacity,
+              opacity: scalingTextOpacity,
               transformOrigin: "center"
             }}
           >
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight leading-tight px-2">
+            <h2 className={`${orbitron.className} text-xl sm:text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight leading-tight px-2`}>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500">
                 $AZT Coin
               </span>
@@ -308,16 +435,27 @@ export default function About() {
                   opacity: imageOpacity,
                 }}
               >
-                {/* Simple full-size image with no styling */}
-                <div className="w-full max-w-[600px]">
+                {/* Coin image with enhanced styling for better blending */}
+                <div className="w-full max-w-[600px] relative">
+                  <div className="absolute inset-0 rounded-full blur-3xl opacity-30" style={{ 
+                    background: "radial-gradient(circle, rgba(250, 203, 5, 0.7) 0%, rgba(250, 203, 5, 0) 70%)",
+                    transform: "scale(0.85)"
+                  }}></div>
                   <Image
                     src="/images/coinimage.png"
                     alt="Aztec Coin"
                     width={1600}
                     height={1600}
                     priority
-                    className="w-full h-auto"
+                    className="w-full h-auto relative z-10"
+                    style={{ 
+                      filter: "drop-shadow(0 0 30px rgba(250, 203, 5, 0.35))"
+                    }}
                   />
+                  <div className="absolute inset-0 z-20 pointer-events-none" style={{
+                    background: "radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.8) 100%)",
+                    mixBlendMode: "multiply"
+                  }}></div>
                 </div>
               </motion.div>
               

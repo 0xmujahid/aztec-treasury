@@ -85,7 +85,7 @@ export default function ListedOn() {
   return (
     <section 
       ref={sectionRef} 
-      className="py-20 bg-[#0A0A0A] text-white overflow-hidden relative" 
+      className="py-20 bg-black text-white overflow-hidden relative" 
       id="listedOn"
     >
      

@@ -111,7 +111,7 @@ export default function Roadmap() {
     <section 
       ref={sectionRef} 
       id="roadmap" 
-      className="py-20 bg-[#0A0A0A] text-white overflow-hidden relative"
+      className="py-20 bg-black text-white overflow-hidden relative"
     >
       <div className="container mx-auto px-4">
         {/* Title with animation */}
