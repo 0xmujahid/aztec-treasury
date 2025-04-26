@@ -158,7 +158,7 @@ export default function HowToBuy() {
           }}
         >
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-wide text-transparent bg-clip-text bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-600 pb-2 inline-block">
-            How to Buy $AZT Coin
+            Tokennomics
         </h2>
           <div className="w-40 h-1 bg-gradient-to-r from-transparent via-yellow-500 to-transparent mx-auto opacity-60 mt-4"></div>
         </motion.div>
